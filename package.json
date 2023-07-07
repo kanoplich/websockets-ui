@@ -7,15 +7,25 @@
     "scripts": {
         "start": "node ./index.js",
         "start:dev": "nodemon ./index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start:prod": "npx run build && build/index",
+        "build": "npx tsc",
+        "lint": "npx eslint ./src",
+        "format": "npx eslint ./src --fix"
     },
     "author": "Andrei Auchynnikau",
     "keywords": [],
     "license": "ISC",
     "devDependencies": {
-        "nodemon": "^2.0.16"
+        "@types/node": "^20.4.0",
+        "@typescript-eslint/eslint-plugin": "^5.61.0",
+        "@typescript-eslint/parser": "^5.61.0",
+        "eslint": "^8.44.0",
+        "nodemon": "^2.0.22",
+        "prettier": "^3.0.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.1.6"
     },
     "dependencies": {
-        "ws": "^8.8.0"
+        "ws": "^8.13.0"
     }
 }
