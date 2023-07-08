@@ -5,8 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "node ./index.js",
-        "start:dev": "nodemon ./index.js",
+        "start:dev": "npx nodemon",
         "start:prod": "npx run build && build/index",
         "build": "npx tsc",
         "lint": "npx eslint ./src",
@@ -17,6 +16,7 @@
     "license": "ISC",
     "devDependencies": {
         "@types/node": "^20.4.0",
+        "@types/ws": "^8.5.5",
         "@typescript-eslint/eslint-plugin": "^5.61.0",
         "@typescript-eslint/parser": "^5.61.0",
         "eslint": "^8.44.0",

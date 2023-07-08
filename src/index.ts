@@ -1,4 +1,5 @@
-import { httpServer } from "./src/http_server/index.js";
+import { httpServer } from './http_server/http_server.js';
+import './http_server/websocket_server.js';
 
 const HTTP_PORT = 8181;
 
