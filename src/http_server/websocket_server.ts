@@ -1,5 +1,7 @@
 import { WebSocketServer } from 'ws';
 import { Message } from '../types/type.js';
+import { handlerUser } from '../modules/handlerUser.js';
+import { handlerRoom } from '../modules/handlerRoom.js';
 
 export const wss = new WebSocketServer({ port: 3000 });
 
@@ -8,27 +10,27 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (message) => {
     const data: Message = JSON.parse(message as unknown as string);
-
+    const id = ws;
     switch (data.type) {
       case 'reg':
         console.log(data.type);
-        ws.send(JSON.stringify(data));
+
+        const reg = handlerUser(data, id);
+        ws.send(JSON.stringify(reg));
         break;
       case 'update_winners':
         console.log(data.type);
         break;
       case 'create_room':
-        console.log(data.type);
-        ws.send(JSON.stringify(data));
+        const create_room = handlerRoom(id);
+        console.log(create_room.type);
+        broadcastMessage(create_room);
         break;
       case 'add_user_to_room':
         console.log(data.type);
         ws.send(JSON.stringify(data));
         break;
       case 'create_game':
-        console.log(data.type);
-        break;
-      case 'update_room':
         console.log(data.type);
         break;
       case 'add_ships':
