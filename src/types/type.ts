@@ -10,14 +10,16 @@ export interface User {
   id: WebSocket;
   index: number;
   name: string;
-  password: string;
-  error: boolean;
-  errorText: string;
 }
 
 export interface Room {
-  indexRoom: number;
-  id: WebSocket;
+  roomId: number;
+  roomUsers: RoomUsers[];
+}
+
+interface RoomUsers {
+  name: string;
+  index: number;
 }
 
 export interface Game {
@@ -28,4 +30,9 @@ export interface Game {
 export interface RoomUpdate {
   roomId: Room;
   roomUse: User;
+}
+
+export interface Winners {
+  name: string;
+  wins: number;
 }

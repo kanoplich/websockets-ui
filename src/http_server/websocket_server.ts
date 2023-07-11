@@ -1,7 +1,9 @@
 import { WebSocketServer } from 'ws';
 import { Message } from '../types/type.js';
-import { handlerUser } from '../modules/handlerUser.js';
-import { handlerRoom } from '../modules/handlerRoom.js';
+import { reg } from '../modules/reg.js';
+import { updateRoom } from '../modules/updateRoom.js';
+import { createGame } from '../modules/createGame.js';
+import { updateWinners } from '../modules/updateWinners.js';
 
 export const wss = new WebSocketServer({ port: 3000 });
 
@@ -13,22 +15,24 @@ wss.on('connection', (ws) => {
     const id = ws;
     switch (data.type) {
       case 'reg':
-        console.log(data.type);
-
-        const reg = handlerUser(data, id);
-        ws.send(JSON.stringify(reg));
+        ws.send(JSON.stringify(reg(data, id)));
+        broadcastMessage(updateRoom());
+        broadcastMessage(updateWinners());
         break;
       case 'update_winners':
         console.log(data.type);
         break;
       case 'create_room':
-        const create_room = handlerRoom(id);
-        console.log(create_room.type);
-        broadcastMessage(create_room);
+        broadcastMessage(updateRoom(id));
+        broadcastMessage(updateWinners());
         break;
       case 'add_user_to_room':
-        console.log(data.type);
-        ws.send(JSON.stringify(data));
+        const create_game = createGame(data, id);
+        create_game.forEach((game) => {
+          console.log(game.data.type);
+          game.id?.send(JSON.stringify(game.data));
+        });
+        broadcastMessage(updateRoom());
         break;
       case 'create_game':
         console.log(data.type);
@@ -49,7 +53,7 @@ wss.on('connection', (ws) => {
         console.log(data.type);
         break;
       case 'finish':
-        console.log(data.type);
+        broadcastMessage(updateWinners(id));
         break;
     }
   });
