@@ -36,3 +36,25 @@ export interface Winners {
   name: string;
   wins: number;
 }
+
+export interface Games {
+  id: WebSocket;
+  idGame: number;
+  ships: Ships[];
+  currentPlayerIndex: number;
+}
+
+interface Ships {
+  position: {
+    x: number;
+    y: number;
+  };
+  direction: boolean;
+  length: number;
+  type: 'small' | 'medium' | 'large' | 'huge';
+}
+
+export interface Turn {
+  idGame: number;
+  currentPlayer: number[];
+}

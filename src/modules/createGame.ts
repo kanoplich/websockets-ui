@@ -1,5 +1,5 @@
 import { Message } from '../types/type.js';
-import { room_db, user_db } from '../data_base/db.js';
+import { room_db, turn_db, user_db } from '../data_base/db.js';
 import { WebSocket } from 'ws';
 
 export const createGame = (data: Message, id: WebSocket) => {
@@ -15,7 +15,7 @@ export const createGame = (data: Message, id: WebSocket) => {
     room_db.splice(delIndex, 1);
 
     const delUserIndex = room_db.findIndex((room) => room.roomUsers[0].name === user?.name);
-    room_db.splice(delUserIndex, 1);
+    if (delUserIndex !== -1) room_db.splice(delUserIndex, 1);
 
     const firstPlayer = {
       idGame: index.indexRoom,
@@ -31,6 +31,9 @@ export const createGame = (data: Message, id: WebSocket) => {
       { id, data: { type: 'create_game', data: JSON.stringify(secondPlayer), id: 1 } },
     ];
 
+    turn_db.push({ idGame: index.indexRoom, currentPlayer: [0] });
+
+    console.log('create_game');
     return players;
   }
 };

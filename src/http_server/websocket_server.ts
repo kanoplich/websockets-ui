@@ -4,6 +4,9 @@ import { reg } from '../modules/reg.js';
 import { updateRoom } from '../modules/updateRoom.js';
 import { createGame } from '../modules/createGame.js';
 import { updateWinners } from '../modules/updateWinners.js';
+import { user_db } from '../data_base/db.js';
+import { startGame } from '../modules/startGame.js';
+import { turn } from '../modules/turn.js';
 
 export const wss = new WebSocketServer({ port: 3000 });
 
@@ -29,7 +32,6 @@ wss.on('connection', (ws) => {
       case 'add_user_to_room':
         const create_game = createGame(data, id);
         create_game.forEach((game) => {
-          console.log(game.data.type);
           game.id?.send(JSON.stringify(game.data));
         });
         broadcastMessage(updateRoom());
@@ -38,13 +40,33 @@ wss.on('connection', (ws) => {
         console.log(data.type);
         break;
       case 'add_ships':
-        console.log(data.type);
+        const start_game = startGame(data, id);
+        start_game?.forEach((game) => {
+          game.id.send(
+            JSON.stringify({
+              type: 'start_game',
+              data: JSON.stringify({
+                idGame: game.idGame,
+                ships: game.ships,
+                currentPlayerIndex: game.currentPlayerIndex,
+              }),
+              id: 0,
+            })
+          );
+          game.id.send(JSON.stringify(turn()));
+        });
         break;
       case 'start_game':
         console.log(data.type);
         break;
       case 'attack':
         console.log(data.type);
+        const attack = turn(data);
+        if (attack) {
+          attack.ws?.forEach((item) => {
+            item.id.send(JSON.stringify(attack.data));
+          });
+        }
         break;
       case 'randomAttack':
         console.log(data.type);
@@ -59,6 +81,8 @@ wss.on('connection', (ws) => {
   });
 
   ws.on('close', () => {
+    const index = user_db.findIndex((user) => user.id === ws);
+    user_db.splice(index, 1);
     console.log('Connection close');
   });
 });
