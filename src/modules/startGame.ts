@@ -1,5 +1,5 @@
-import { Message } from '../types/type.js';
-import { games_db } from '../data_base/db.js';
+import { Message, Ships } from '../types/type.js';
+import { games_db, ships_db } from '../data_base/db.js';
 import { WebSocket } from 'ws';
 
 export const startGame = (data: Message, id: WebSocket) => {
@@ -7,7 +7,103 @@ export const startGame = (data: Message, id: WebSocket) => {
 
   const searchGame = games_db.filter((game) => game.idGame === response.gameId);
 
+  const ships = response.ships.map((item: Ships) => {
+    if (item.type === 'huge') {
+      if (item.direction) {
+        const positions = [
+          { x: item.position.x, y: item.position.y },
+          { x: item.position.x, y: item.position.y + 1 },
+          { x: item.position.x, y: item.position.y + 2 },
+          { x: item.position.x, y: item.position.y + 3 },
+        ];
+        return {
+          position: positions,
+          direction: item.direction,
+          length: item.length,
+          type: item.type,
+        };
+      } else {
+        const positions = [
+          { x: item.position.x, y: item.position.y },
+          { x: item.position.x + 1, y: item.position.y },
+          { x: item.position.x + 2, y: item.position.y },
+          { x: item.position.x + 3, y: item.position.y },
+        ];
+        return {
+          position: positions,
+          direction: item.direction,
+          length: item.length,
+          type: item.type,
+        };
+      }
+    } else if (item.type === 'large') {
+      if (item.direction) {
+        const positions = [
+          { x: item.position.x, y: item.position.y },
+          { x: item.position.x, y: item.position.y + 1 },
+          { x: item.position.x, y: item.position.y + 2 },
+        ];
+        return {
+          position: positions,
+          direction: item.direction,
+          length: item.length,
+          type: item.type,
+        };
+      } else {
+        const positions = [
+          { x: item.position.x, y: item.position.y },
+          { x: item.position.x + 1, y: item.position.y },
+          { x: item.position.x + 2, y: item.position.y },
+        ];
+        return {
+          position: positions,
+          direction: item.direction,
+          length: item.length,
+          type: item.type,
+        };
+      }
+    } else if (item.type === 'medium') {
+      if (item.direction) {
+        const positions = [
+          { x: item.position.x, y: item.position.y },
+          { x: item.position.x, y: item.position.y + 1 },
+        ];
+        return {
+          position: positions,
+          direction: item.direction,
+          length: item.length,
+          type: item.type,
+        };
+      } else {
+        const positions = [
+          { x: item.position.x, y: item.position.y },
+          { x: item.position.x + 1, y: item.position.y },
+        ];
+        return {
+          position: positions,
+          direction: item.direction,
+          length: item.length,
+          type: item.type,
+        };
+      }
+    } else {
+      return {
+        position: [item.position],
+        direction: item.direction,
+        length: item.length,
+        type: item.type,
+      };
+    }
+  });
+
   if (searchGame.length === 0) {
+    ships_db.push({
+      id: id,
+      idGame: response.gameId,
+      ships,
+      currentPlayerIndex: response.indexPlayer,
+    });
+
     games_db.push({
       id: id,
       idGame: response.gameId,
@@ -15,6 +111,13 @@ export const startGame = (data: Message, id: WebSocket) => {
       currentPlayerIndex: response.indexPlayer,
     });
   } else if (searchGame.length === 1) {
+    ships_db.push({
+      id: id,
+      idGame: response.gameId,
+      ships,
+      currentPlayerIndex: response.indexPlayer,
+    });
+
     games_db.push({
       id: id,
       idGame: response.gameId,

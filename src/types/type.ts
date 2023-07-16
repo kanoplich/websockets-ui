@@ -44,7 +44,14 @@ export interface Games {
   currentPlayerIndex: number;
 }
 
-interface Ships {
+export interface Games_db {
+  id: WebSocket;
+  idGame: number;
+  ships: Ships_db[];
+  currentPlayerIndex: number;
+}
+
+export interface Ships {
   position: {
     x: number;
     y: number;
@@ -57,4 +64,23 @@ interface Ships {
 export interface Turn {
   idGame: number;
   currentPlayer: number[];
+}
+
+export interface Attack {
+  gameId: number;
+  x: number;
+  y: number;
+  indexPlayer: number;
+}
+
+export interface Ships_db {
+  position: Coordinates[];
+  direction: boolean;
+  length: number;
+  type: 'small' | 'medium' | 'large' | 'huge';
+}
+
+interface Coordinates {
+  x: number;
+  y: number;
 }

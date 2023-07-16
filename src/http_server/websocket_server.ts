@@ -64,6 +64,7 @@ wss.on('connection', (ws) => {
         const attack = turn(data);
         if (attack) {
           attack.ws?.forEach((item) => {
+            item.id.send(JSON.stringify(attack.resultAttack));
             item.id.send(JSON.stringify(attack.data));
           });
         }
