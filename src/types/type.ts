@@ -71,13 +71,11 @@ export interface Attack {
   x: number;
   y: number;
   indexPlayer: number;
+  resultGame: Message | undefined;
 }
 
 export interface Ships_db {
   position: Coordinates[];
-  direction: boolean;
-  length: number;
-  type: 'small' | 'medium' | 'large' | 'huge';
 }
 
 interface Coordinates {

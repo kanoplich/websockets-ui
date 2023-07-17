@@ -18,9 +18,6 @@ export const startGame = (data: Message, id: WebSocket) => {
         ];
         return {
           position: positions,
-          direction: item.direction,
-          length: item.length,
-          type: item.type,
         };
       } else {
         const positions = [
@@ -31,9 +28,6 @@ export const startGame = (data: Message, id: WebSocket) => {
         ];
         return {
           position: positions,
-          direction: item.direction,
-          length: item.length,
-          type: item.type,
         };
       }
     } else if (item.type === 'large') {
@@ -45,9 +39,6 @@ export const startGame = (data: Message, id: WebSocket) => {
         ];
         return {
           position: positions,
-          direction: item.direction,
-          length: item.length,
-          type: item.type,
         };
       } else {
         const positions = [
@@ -57,9 +48,6 @@ export const startGame = (data: Message, id: WebSocket) => {
         ];
         return {
           position: positions,
-          direction: item.direction,
-          length: item.length,
-          type: item.type,
         };
       }
     } else if (item.type === 'medium') {
@@ -70,9 +58,6 @@ export const startGame = (data: Message, id: WebSocket) => {
         ];
         return {
           position: positions,
-          direction: item.direction,
-          length: item.length,
-          type: item.type,
         };
       } else {
         const positions = [
@@ -81,17 +66,11 @@ export const startGame = (data: Message, id: WebSocket) => {
         ];
         return {
           position: positions,
-          direction: item.direction,
-          length: item.length,
-          type: item.type,
         };
       }
     } else {
       return {
         position: [item.position],
-        direction: item.direction,
-        length: item.length,
-        type: item.type,
       };
     }
   });

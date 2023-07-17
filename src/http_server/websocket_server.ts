@@ -22,9 +22,9 @@ wss.on('connection', (ws) => {
         broadcastMessage(updateRoom());
         broadcastMessage(updateWinners());
         break;
-      case 'update_winners':
-        console.log(data.type);
-        break;
+      // case 'update_winners':
+      //   console.log(data.type);
+      //   break;
       case 'create_room':
         broadcastMessage(updateRoom(id));
         broadcastMessage(updateWinners());
@@ -36,9 +36,9 @@ wss.on('connection', (ws) => {
         });
         broadcastMessage(updateRoom());
         break;
-      case 'create_game':
-        console.log(data.type);
-        break;
+      // case 'create_game':
+      //   console.log(data.type);
+      //   break;
       case 'add_ships':
         const start_game = startGame(data, id);
         start_game?.forEach((game) => {
@@ -56,9 +56,9 @@ wss.on('connection', (ws) => {
           game.id.send(JSON.stringify(turn()));
         });
         break;
-      case 'start_game':
-        console.log(data.type);
-        break;
+      // case 'start_game':
+      //   console.log(data.type);
+      //   break;
       case 'attack':
         console.log(data.type);
         const attack = turn(data);
@@ -66,18 +66,23 @@ wss.on('connection', (ws) => {
           attack.ws?.forEach((item) => {
             item.id.send(JSON.stringify(attack.resultAttack));
             item.id.send(JSON.stringify(attack.data));
+            if (attack.resultAttack.resultGame) {
+              item.id.send(JSON.stringify(attack.resultAttack.resultGame));
+              if (id === item.id) {
+                broadcastMessage(updateWinners(id));
+              }
+            }
           });
         }
         break;
-      case 'randomAttack':
-        console.log(data.type);
-        break;
-      case 'turn':
-        console.log(data.type);
-        break;
-      case 'finish':
-        broadcastMessage(updateWinners(id));
-        break;
+      // case 'randomAttack':
+      //   console.log(data.type);
+      //   break;
+      // case 'turn':
+      //   console.log(data.type);
+      //   break;
+      // case 'finish':
+      //   break;
     }
   });
 
